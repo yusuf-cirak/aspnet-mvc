@@ -1,0 +1,82 @@
+ @model StudentManagement.ViewModels.StudentCreateOrUpdateViewModel
+                    @using Newtonsoft.Json;
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="max-width:450px;">
+      <div class="modal-header" style="padding-block:7px;">
+        <h5 class="modal-title" id="exampleModalLongTitle">Yeni Öğrenci</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding-block:5px;">
+                          
+                        <div class="card container text-center justify-content ">
+                            <form asp-antiforgery="false"  id="createForm">
+                                @* <input type="hidden" asp-for="@Model.Id" id='Id' value='@Model.Id' /> *@
+                                <input type="hidden" asp-for="Student.Id" id='Id' />
+                                <div class="form-group">
+                                    <label class="control-label text-center">Ad Soyad</label>
+                                    @* <input asp-for="FullName" id='FullName' value='@Model.FullName' class="form-control text-center" /> *@
+                                    <input asp-for="Student.FullName" id='FullName' name="FullName" value="" class="form-control text-center" />
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Bölüm</label>
+                                    <br />
+                                    @* <select asp-for="DepartmentId" id='DepartmentId' class="select form-control text-center"> *@
+                                    <select asp-for="Student.DepartmentId" id='DepartmentId' value="" name="DepartmentId" class="select form-control text-center">
+                                        @foreach (var department in Model.Departments)
+                                        {
+                                                <option value="@department.Id">@department.Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Hobiler</label>
+                                    <br />
+                                    <select asp-for="Student.Hobbies" id="multiple-checkboxes" name="HobbyNames" class="form-control text-center HobbyNames" multiple="multiple">
+                                        @foreach (var hobby in Model.Hobbies)
+                                        {
+                                                <option value="@hobby.Id">@hobby.Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Sınıf Öğretmeni</label>
+                                    <br />
+
+                                    <select asp-for="Student.ClassTeacherId" name="ClassTeacherId" id='ClassTeacherId' class="select text-center form-control">
+
+                                       @foreach (var classTeacher in Model.ClassTeachers)
+                                        {
+                                                <option value="@classTeacher.Id">@classTeacher.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Rehber Öğretmeni</label>
+                                    <br />
+                                    <select asp-for="Student.MentorTeacherId" id='MentorTeacherId' name="MentorTeacherId" class="select form-control text-center">
+                                        @foreach (var mentorTeacher in Model.MentorTeachers)
+                                        {
+                                                <option value="@mentorTeacher.Id">@mentorTeacher.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" id="createBtn" value="Save" class="btn btn-primary form-control btn-update" />
+                                </div>
+                            </form>
+                        </div>
+      </div>
+    </div>
+  </div>
+</div>

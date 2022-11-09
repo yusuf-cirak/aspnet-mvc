@@ -1,0 +1,62 @@
+@model IEnumerable<Student>
+@{
+    string GetUserHobbiesAsString(IList<Hobby> hobbies)
+    {
+        var sb = new StringBuilder();
+        for (int i = 0; i < hobbies.Count; i++)
+        {
+            sb.Append(hobbies[i].Name);
+            if (i!=hobbies.Count-1)
+            {
+                sb.Append(", ");
+            }
+        }
+        return sb.ToString();
+    }
+}
+    <div class="row justify-content-start">
+        <div class="row ">
+            <div class="col" >
+                 <div class="card">
+                <div class="card-body">
+                    <table id="myTable" class="table table-bordered table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Ad Soyad</th>
+                                <th>Bölüm</th>
+                                <th>Hobiler</th>
+                                <th>Sınıf Öğretmen</th>
+                                <th>Rehber Öğretmen</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr id="@student.Id">
+                                    <td id="formStudentFullName">@student.FullName</td>
+                                    <td id="formStudentDepartmentName">@student.Department.Name</td>
+                                    <td id="formStudentHobbies">@GetUserHobbiesAsString(student.Hobbies)</td>
+                                    <td id="formStudentClassTeacherName">@student.ClassTeacher.FullName</td>
+                                    <td id="formStudentMentorTeacherName">@student.MentorTeacher.FullName</td>
+                                    <td>
+                                    <a id="btnDetails" name="@student.Id" class="btn btn-info">Güncelle</a>
+                                    <a id="btnDelete" name="@student.Id" class="btn btn-danger deleteBtn">Sil</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                </div>
+            </div>
+            <div class="col" style="text-align:center;">
+    <button id="createBtn" type="button" data-bs-toggle="modal" class="btn btn-primary mb-3" data-bs-target="#exampleModalLong">Öğrenci ekle</button>
+                <div class="create-partial"></div>
+                <div class="update-partial"></div> 
+            </div>
+
+            
+        </div>
+    </section>

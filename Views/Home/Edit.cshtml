@@ -1,0 +1,252 @@
+﻿                    @model StudentManagement.ViewModels.StudentCreateOrUpdateViewModel
+                    @using Newtonsoft.Json;
+                        <div class="card container text-center justify-content">
+                            <form asp-antiforgery="false"  id="editForm">
+                                @* <input type="hidden" asp-for="@Model.Id" id='Id' value='@Model.Id' /> *@
+                                <input type="hidden" asp-for="Student.Id" id='Id' />
+                                <div class="form-group mt-3">
+                                    <label class="control-label text-center">Ad Soyad</label>
+                                    @* <input asp-for="FullName" id='FullName' value='@Model.FullName' class="form-control text-center" /> *@
+                                    <input asp-for="Student.FullName" id='FullName' name="FullName" value="" disabled class="form-control text-center" />
+
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="control-label">Bölüm</label>
+                                    <br />
+                                    @* <select asp-for="DepartmentId" id='DepartmentId' class="select form-control text-center"> *@
+                                    <select asp-for="Student.DepartmentId" id='DepartmentId' value="" name="DepartmentId" class="select form-control text-center">
+                                        @foreach (var department in Model.Departments)
+                                        {
+                                                <option value="@department.Id" hidden disabled>@department.Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="control-label">Hobiler</label>
+                                    <br />
+                                    <select asp-for="Student.Hobbies" id="multiple-checkboxes" name="HobbyNames" class="form-control text-center HobbyNames" multiple="multiple">
+                                        @foreach (var hobby in Model.Hobbies)
+                                        {
+                                                <option value="@hobby.Id" hidden disabled>@hobby.Name</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="control-label">Sınıf Öğretmeni</label>
+                                    <br />
+
+                                    <select asp-for="Student.ClassTeacherId" name="ClassTeacherId" id='ClassTeacherId' class="select text-center form-control">
+
+                                       @foreach (var classTeacher in Model.ClassTeachers)
+                                        {
+                                                <option value="@classTeacher.Id" hidden disabled>@classTeacher.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="control-label">Rehber Öğretmeni</label>
+                                    <br />
+                                    <select asp-for="Student.MentorTeacherId" id='MentorTeacherId' name="MentorTeacherId" class="select form-control text-center">
+                                        @foreach (var mentorTeacher in Model.MentorTeachers)
+                                        {
+                                                <option value="@mentorTeacher.Id" hidden disabled>@mentorTeacher.FullName</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input type="submit" disabled id="editBtn" value="Save" class="btn btn-primary form-control btn-update" />
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <script type="text/javascript">
+                         var inputFullName=$('input#FullName');
+                         var departmentSelects=$('select#DepartmentId option')
+                        var classTeacherSelects=$('select#ClassTeacherId option')
+                         var mentorTeacherSelects=$('select#MentorTeacherId option')
+                        var hobbyMultipleSelects=$('select.HobbyNames option')
+
+
+
+
+
+                         // update student fields by clicking details button
+                            $(document).ready(function (){
+                                $('[id*=btnDetails]').on('click', function () {
+                        $.ajax({
+                    url: '@Url.Action("edit", "home")',
+                    dataType: "html",
+                    data: { "id": $(this).attr('name') },
+                    type: "GET",
+                    contentType: "application/json",
+                    success: function (response) {
+                        response=JSON.parse(response);
+                        console.log(response);
+
+
+                         $('input#Id').attr('value',response.id);
+
+                         inputFullName.val(response.fullName);
+
+                         inputFullName.removeAttr('disabled')
+
+
+
+                         $(departmentSelects).each(function(i){
+                            $(departmentSelects)[i].removeAttribute('hidden')
+                            $(departmentSelects)[i].removeAttribute('disabled')
+
+                         })
+                    
+                        var selectedDepartment=$("select#DepartmentId option[value="+response.departmentId+"]").val();
+                        $('select#DepartmentId').val(selectedDepartment)
+
+                         $(classTeacherSelects).each(function(i){
+                            $(classTeacherSelects)[i].removeAttribute('hidden')
+
+                            $(classTeacherSelects)[i].removeAttribute('disabled')
+
+                         })
+                        var selectedClassTeacher=$("select#ClassTeacherId option[value="+response.classTeacherId+"]").val();
+                        $('select#ClassTeacherId').val(selectedDepartment)
+
+
+                         $(mentorTeacherSelects).each(function(i){
+                            $(mentorTeacherSelects)[i].removeAttribute('hidden')
+                            $(mentorTeacherSelects)[i].removeAttribute('disabled')
+                         })
+                         
+                        var selectedMentorTeacher=$("select#MentorTeacherId option[value="+response.mentorTeacherId+"]").val();
+                        $('select#MentorTeacherId').val(selectedMentorTeacher)
+
+                         $(hobbyMultipleSelects).each(function(i){
+                            $(hobbyMultipleSelects)[i].removeAttribute('hidden')
+                            $(hobbyMultipleSelects)[i].removeAttribute('disabled')
+                         })
+
+                          $(response.hobbies).each(function(i){
+                            $('#multiple-checkboxes').val(response.hobbies[i].id);
+                            $(`#multiple-checkboxes option[value="`+response.hobbies[i].id+`"]`).prop('selected',true)
+                         })
+
+
+
+                        $('#editBtn').removeAttr('disabled')
+
+                        },
+                        error: function (err) {
+                        alert(err.responseText);
+                    }
+                    })
+                    
+                });
+            });
+                        </script>
+
+
+                            <script type="text/javascript">
+                            var formInputsChanged = false;
+
+                            $(document).ready(function () {
+                                $('input, select').change(function () {
+                                    formInputsChanged = true;
+                                })
+                            })
+
+                            $(document).ready(function(){
+                                $('form').submit(function(e){
+                                    e.preventDefault();
+                                    if(formInputsChanged){
+                                        var hobbyNames=[];
+                                            console.log($('.HobbyNames :selected'));
+                                        $.each(jQuery('.HobbyNames :selected'),function(){
+                                            hobbyNames.push(jQuery(this).text())
+                                        })
+
+                                        var studentData={
+                                            id:$('#Id').val(),
+                                            departmentId:$('#DepartmentId').val(),
+                                            classTeacherId:$('#ClassTeacherId').val(),
+                                            mentorTeacherId:$('#MentorTeacherId').val(),
+                                            fullName:$('input#FullName').val(),
+                                            hobbyNames:hobbyNames
+                                        }
+
+                            $('#editBtn').attr('disabled','true')
+                         inputFullName.attr('disabled','true')
+                         inputFullName.attr("value","")
+                         inputFullName.val("")
+
+
+
+                         $(departmentSelects).each(function(i){
+                            $(departmentSelects)[i].setAttribute('hidden','true')
+                            $(departmentSelects)[i].setAttribute('disabled','true') 
+
+                         })
+
+                         $('select#DepartmentId').val('')
+
+                         $(classTeacherSelects).each(function(i){
+                            $(classTeacherSelects)[i].setAttribute('hidden','true')
+                            $(classTeacherSelects)[i].setAttribute('disabled','true')
+
+                         })
+                         $('select#ClassTeacherId').val('')
+
+
+                          $(mentorTeacherSelects).each(function(i){
+                            $(mentorTeacherSelects)[i].setAttribute('hidden','true')
+                            $(mentorTeacherSelects)[i].setAttribute('disabled','true')
+                         })
+                         $('select#MentorTeacherId').val('')
+
+                          $(hobbyMultipleSelects).each(function(i){
+                            $(hobbyMultipleSelects)[i].setAttribute('hidden','true')
+                            $(hobbyMultipleSelects)[i].setAttribute('disabled','true')
+                            $(hobbyMultipleSelects)[i].setAttribute('selected','false')
+                         })
+
+                                         jsonData=JSON.stringify(studentData);
+
+
+                                            $.ajax({
+                                                url: "/home/edit",
+                                                type: "POST",
+                                                dataType: "json",
+                                                contentType: "application/json; charset=utf-8",
+                                                data: jsonData,
+                                                success: function (res) {
+                                                    console.log(res)
+                                                    @* $(`tr[id="`+res.id+`"`)[0].innerText=res.fullName;
+                                                    $(`tr[id="`+res.id+`"`)[1].innerText=res.department.name; *@
+                                                    console.log($(`tr[id="`+res.id+`"`));
+
+                                                    var students;
+
+                                                    $.ajax({
+                                                        type:"post",
+                                                        url:"home/getstudents",
+                                                        data:{},
+                                                        success(data){
+                                                            students=data;
+                                                        } 
+                                                    })
+
+                                                },
+                                                error: function (err) {
+                                                   console.log(err);
+                                                }
+                                            }); 
+                                    }
+
+                                    else alert("You didnt change anything")
+                                })
+                            })
+
+                            </script>

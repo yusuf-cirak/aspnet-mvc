@@ -1,0 +1,29 @@
+﻿html,
+    body,
+.intro {
+    height: 100%;
+}
+
+table td,
+    table th {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*overflow: hidden;*/
+    text-align: center!important;
+}
+
+.card {
+    border-radius: .5rem;
+}
+
+.table-sm td, .table-sm th {
+    padding: .1rem!important;
+}
+
+.row > * {
+    width: fit-content!important;
+}
+
+@-webkit - keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@-moz - keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
