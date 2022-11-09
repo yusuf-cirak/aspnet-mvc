@@ -60,23 +60,40 @@
 // }
 
 using StudentManagement.Models;
+using StudentManagement.ViewModels;
 
 public static class StudentService{
-            public static Student UpdateStudent(this Student studentToUpdate, Student newStudentInfos,List<Teacher> classTeachers,List<Teacher> mentorTeachers,List<Department> departments)
+            public static Student UpdateStudent(this Student studentToUpdate, UpdateStudentReceivedViewModel receivedUser,List<Teacher> classTeachers,List<Teacher> mentorTeachers,List<Department> departments,List<Hobby> hobbies)
         {
-            studentToUpdate.FullName=newStudentInfos.FullName;
-            studentToUpdate.ClassTeacher=classTeachers.FirstOrDefault(e=>e.Id==newStudentInfos.ClassTeacherId);
-            studentToUpdate.ClassTeacherId=newStudentInfos.ClassTeacherId;
+
+            studentToUpdate.FullName=receivedUser.FullName;
+
+            studentToUpdate.ClassTeacher=classTeachers.FirstOrDefault(e=>e.Id==receivedUser.ClassTeacherId);
+            studentToUpdate.ClassTeacherId=receivedUser.ClassTeacherId;
+
+            studentToUpdate.Department=departments.FirstOrDefault(e=>e.Id==receivedUser.DepartmentId);
+            studentToUpdate.DepartmentId=receivedUser.DepartmentId;
+
+            studentToUpdate.MentorTeacher=mentorTeachers.FirstOrDefault(e=>e.Id==receivedUser.MentorTeacherId);
+            studentToUpdate.MentorTeacherId=receivedUser.MentorTeacherId;
 
 
-            studentToUpdate.Department=departments.FirstOrDefault(e=>e.Id==newStudentInfos.DepartmentId);
-            studentToUpdate.DepartmentId=newStudentInfos.DepartmentId;
-
-            studentToUpdate.MentorTeacher=mentorTeachers.FirstOrDefault(e=>e.Id==newStudentInfos.MentorTeacherId);
-            studentToUpdate.MentorTeacherId=newStudentInfos.MentorTeacherId;
-
-            studentToUpdate.Hobbies=newStudentInfos.Hobbies;
+            studentToUpdate.Hobbies=SetStudentHobbies(receivedUser.HobbyIds,hobbies);
 
             return studentToUpdate;
+        }
+
+
+
+        private static List<Hobby> SetStudentHobbies(int[] hobbyIds,List<Hobby> hobbies){
+            List<Hobby> hobbyList=new();
+
+            foreach (var id in hobbyIds)
+            {
+                hobbyList.Add(hobbies.First(e=>e.Id==id)!);
+            }
+
+            return hobbyList;
+
         }
 }

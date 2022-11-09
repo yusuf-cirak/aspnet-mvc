@@ -26,7 +26,7 @@
                                 <div class="form-group mt-3">
                                     <label class="control-label">Hobiler</label>
                                     <br />
-                                    <select asp-for="Student.Hobbies" id="multiple-checkboxes" name="HobbyNames" class="form-control text-center HobbyNames" multiple="multiple">
+                                    <select asp-for="Student.Hobbies" id="multi-select-hobby" name="HobbyNames[]" class="form-control text-center HobbyNames" multiple="multiple">
                                         @foreach (var hobby in Model.Hobbies)
                                         {
                                                 <option value="@hobby.Id" hidden disabled>@hobby.Name</option>
@@ -69,7 +69,7 @@
                          var departmentSelects=$('select#DepartmentId option')
                         var classTeacherSelects=$('select#ClassTeacherId option')
                          var mentorTeacherSelects=$('select#MentorTeacherId option')
-                        var hobbyMultipleSelects=$('select.HobbyNames option')
+                        var hobbyMultipleSelects=$('#multi-select-hobby option')
 
 
 
@@ -91,10 +91,10 @@
 
                          $('input#Id').attr('value',response.id);
 
-                         inputFullName.val(response.fullName);
 
                          inputFullName.removeAttr('disabled')
-
+                         inputFullName.attr('value',response.fullName);
+                         inputFullName.val(response.fullName);
 
 
                          $(departmentSelects).each(function(i){
@@ -124,14 +124,14 @@
                         var selectedMentorTeacher=$("select#MentorTeacherId option[value="+response.mentorTeacherId+"]").val();
                         $('select#MentorTeacherId').val(selectedMentorTeacher)
 
-                         $(hobbyMultipleSelects).each(function(i){
-                            $(hobbyMultipleSelects)[i].removeAttribute('hidden')
-                            $(hobbyMultipleSelects)[i].removeAttribute('disabled')
+                         $(hobbyMultipleSelects).each(function(){
+                            $(this).removeAttr('hidden')
+                            $(this).removeAttr('disabled')
                          })
 
+
                           $(response.hobbies).each(function(i){
-                            $('#multiple-checkboxes').val(response.hobbies[i].id);
-                            $(`#multiple-checkboxes option[value="`+response.hobbies[i].id+`"]`).prop('selected',true)
+                            $(`#multi-select-hobby option[value="`+response.hobbies[i].id+`"]`).prop('selected',true)
                          })
 
 
@@ -147,10 +147,12 @@
                 });
             });
                         </script>
-
-
                             <script type="text/javascript">
                             var formInputsChanged = false;
+
+                             @* $(document).ready(function() {
+                                    $('#multi-select-hobby').multiselect();
+                                }); *@
 
                             $(document).ready(function () {
                                 $('input, select').change(function () {
@@ -162,21 +164,25 @@
                                 $('form').submit(function(e){
                                     e.preventDefault();
                                     if(formInputsChanged){
-                                        var hobbyNames=[];
-                                            console.log($('.HobbyNames :selected'));
-                                        $.each(jQuery('.HobbyNames :selected'),function(){
-                                            hobbyNames.push(jQuery(this).text())
+                                        var hobbyIds=[];
+                                        var selectedHobbyNames=$('#multi-select-hobby option:selected');
+                                        $(selectedHobbyNames).each(function(i,e){
+                                            hobbyIds.push(selectedHobbyNames[i].value);
+                                            console.log(selectedHobbyNames[i].value)
                                         })
 
-                                        var studentData={
-                                            id:$('#Id').val(),
-                                            departmentId:$('#DepartmentId').val(),
-                                            classTeacherId:$('#ClassTeacherId').val(),
-                                            mentorTeacherId:$('#MentorTeacherId').val(),
-                                            fullName:$('input#FullName').val(),
-                                            hobbyNames:hobbyNames
-                                        }
+                                        
+                                        
 
+                                        var studentData={
+                                            id:$('input#Id').val(),
+                                            fullName:$('input#FullName').val(),
+                                            departmentId:$('select#DepartmentId').val(),
+                                            hobbyIds:hobbyIds,
+                                            classTeacherId:$('select#ClassTeacherId').val(),
+                                            mentorTeacherId:$('select#MentorTeacherId').val()
+                                        }
+                                        console.log(studentData)
                             $('#editBtn').attr('disabled','true')
                          inputFullName.attr('disabled','true')
                          inputFullName.attr("value","")
@@ -223,10 +229,6 @@
                                                 data: jsonData,
                                                 success: function (res) {
                                                     console.log(res)
-                                                    @* $(`tr[id="`+res.id+`"`)[0].innerText=res.fullName;
-                                                    $(`tr[id="`+res.id+`"`)[1].innerText=res.department.name; *@
-                                                    console.log($(`tr[id="`+res.id+`"`));
-
                                                     var students;
 
                                                     $.ajax({

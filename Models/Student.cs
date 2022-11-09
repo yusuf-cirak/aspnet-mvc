@@ -17,7 +17,7 @@ namespace StudentManagement.Models
 
         public Department? Department { get; set; }
 
-        public IList<Hobby>? Hobbies { get; set; }
+        public List<Hobby>? Hobbies { get; set; }
 
         public Teacher? ClassTeacher { get; set; }
 

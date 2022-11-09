@@ -14,11 +14,6 @@
         return sb.ToString();
     }
 }
-    <div class="row justify-content-start">
-        <div class="row ">
-            <div class="col" >
-                 <div class="card">
-                <div class="card-body">
                     <table id="myTable" class="table table-bordered table-hover table-sm">
                         <thead>
                             <tr>
@@ -47,16 +42,14 @@
                             }
                         </tbody>
                     </table>
-                </div>
-                </div>
-                </div>
-            </div>
-            <div class="col" style="text-align:center;">
-    <button id="createBtn" type="button" data-bs-toggle="modal" class="btn btn-primary mb-3" data-bs-target="#exampleModalLong">Öğrenci ekle</button>
-                <div class="create-partial"></div>
-                <div class="update-partial"></div> 
-            </div>
 
-            
-        </div>
-    </section>
+    <script type="text/javascript">
+    // DataTable
+        jQuery(document).ready(function () {
+            jQuery('#myTable').DataTable({
+                "scrollY": "450px",
+                "scrollCollapse": true,
+                "paging": true
+            });
+        });
+    </script>

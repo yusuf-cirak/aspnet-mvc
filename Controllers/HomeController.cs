@@ -29,7 +29,7 @@ namespace StudentManagement.Controllers
             return View(_students);
         }
 
-        public JsonResult GetStudents() => Json(_students);
+        public ActionResult GetStudents() => PartialView("List",_students);
 
         [HttpGet]
     public ActionResult GetCreateOrUpdatePartial([FromQuery] string partialName){
@@ -50,14 +50,15 @@ namespace StudentManagement.Controllers
 
     [HttpPost]
     [Consumes("application/json")]
-    public async Task<JsonResult> Edit([FromBody] Student student)
+    public async Task<JsonResult> Edit([FromBody] UpdateStudentReceivedViewModel student)
     {
         if (!ModelState.IsValid)
         {
             throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
         }
-      
-        return Json( _students.Find(e => e.Id==student.Id)?.UpdateStudent(student,_classTeachers,_mentorTeachers,_departments));
+
+
+        return Json( _students.Find(e => e.Id==student.Id)?.UpdateStudent(student,_classTeachers,_mentorTeachers,_departments,_hobbies));
     }
 
         public IActionResult Privacy()
