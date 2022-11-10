@@ -87,6 +87,10 @@
                     success: function (response) {
                         response=JSON.parse(response);
 
+                        $(`#edit-multi-select-hobby option:selected`).each(function(){
+                            $(this).prop('selected',false)
+                        })
+
 
                          $('input#EditId').attr('value',response.id);
 

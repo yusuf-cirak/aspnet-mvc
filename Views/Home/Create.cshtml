@@ -78,6 +78,7 @@
 </div>
 
 
+
 <script>
         $(document).ready(function(){
             $('#createStudentModal').click(function(){
@@ -88,7 +89,6 @@
 
             $('#createForm').submit(function(e){
                 e.preventDefault();
-                debugger;
                 var hobbyIds=[];
                                         var selectedHobbyNames=$('#create-multiple-checkboxes option:selected');
                                         $(selectedHobbyNames).each(function(i,e){
@@ -116,22 +116,17 @@
 
 
                                         jsonData=JSON.stringify(studentData);
-
+debugger;
                                         $.ajax({
                                             method:"post",
                                             contentType:'application/json; charset=utf-8',
                                             dataType:"html",
                                             data:jsonData,
                                             url:"/home/create",
-                                            success: function (res) {
-                                                debugger;
-                                                    @* $('table#myTable').remove();
-                                                    $('div.list-partial').html(res); *@
-                                                    jQuery('#myTable').DataTable({
-                "scrollY": "450px",
-                "scrollCollapse": true,
-                "paging": true
-            }).ajax.reload();
+                                            success: function () {
+                                                console.log("asdasdas");
+                                                    $('div.list-partial').empty().load("/home/getlistpartial")
+                                                    @* $('div.list-partial').html(res); *@
                                                     $('#exampleModalLong').modal('hide');
 
                                                     toastr.success("Öğrenci verisi başarıyla güncellendi!");
@@ -145,8 +140,5 @@
 
             })
         })
-
-
-
 
     </script>
