@@ -98,8 +98,11 @@
                                             toastr.warning('Lütfen alanları doldurunuz!')
                                             return;
                                         }
+                                        $(selectedHobbyNames).each(function(i){
+                                            $(this).prop('selected',false)
+                                        })
 
-                
+
                 var studentData={
                                             id:$('input#CreateId').val(),
                                             fullName:$('#CreateFullName').val(),
@@ -113,21 +116,52 @@
                                         $('input#CreateFullName').val('');
                                         $('input#CreateFullName').val('');
 
+                                        
+
 
 
                                         jsonData=JSON.stringify(studentData);
-debugger;
                                         $.ajax({
                                             method:"post",
                                             contentType:'application/json; charset=utf-8',
                                             dataType:"html",
                                             data:jsonData,
                                             url:"/home/create",
-                                            success: function () {
-                                                console.log("asdasdas");
-                                                    $('div.list-partial').empty().load("/home/getlistpartial")
-                                                    @* $('div.list-partial').html(res); *@
-                                                    $('#exampleModalLong').modal('hide');
+                                            cache:false,
+                                            success: function (res) {
+                                                $('.list-partial').html(res);
+                                jQuery('#myTable').DataTable({
+                            "scrollY": "450px",
+                            "scrollCollapse": true,
+                            "paging": true
+                        });
+
+                                                @* var student=JSON.parse(res);
+                                                console.log(student);
+                                                var studentHobbiesArr=student.hobbies;
+                                                var studentHobbiesStr="";
+                                                for(var i=0;i<studentHobbiesArr.length;i++){
+                                                    if(i!=studentHobbiesArr.length-1){
+                                                        studentHobbiesStr+=studentHobbiesArr[i].name+", "
+                                                    }
+                                                    else{
+                                                        studentHobbiesStr+=studentHobbiesArr[i].name;
+                                                    }
+                                                }
+
+                                                console.log(studentHobbiesStr); *@
+                                                $('#exampleModalLong').modal('hide');
+
+                                                @* var raw=`<tr id="`+student.id+`"><td id="formStudentFullName" class="sorting_1">`+student.fullName+`</td>`+
+                                                    `<td id="formStudentDepartmentName">`+student.department.name+`</td>`+
+                                                     `<td id="formStudentHobbies">`+studentHobbiesStr+`</td>`+
+                                                     `<td id="formStudentClassTeacherName">`+student.classTeacher.fullName+`</td>`+
+                                                     `<td id="formStudentMentorTeacherName">`+student.mentorTeacher.fullName+`</td>`+
+                                                     `<td><a id="btnDetails" name="`+student.id+`" class="btn btn-info">Güncelle</a>`+
+                                                     `<a id="btnDelete" name="`+student.id+`" class="btn btn-danger">Sil</a> </td>`+`</tr>`
+
+
+                                                $('table#myTable tbody').append(raw); *@
 
                                                     toastr.success("Öğrenci verisi başarıyla güncellendi!");
                                                 },
@@ -142,3 +176,4 @@ debugger;
         })
 
     </script>
+

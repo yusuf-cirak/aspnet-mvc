@@ -70,7 +70,9 @@ namespace StudentManagement.Controllers
             throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
         }
 
-            _students.Add(receivedStudent.CreateStudent(_hobbies,_classTeachers,_mentorTeachers,_departments,_students.Max(e=>e.Id)));
+        var student=receivedStudent.CreateStudent(_hobbies,_classTeachers,_mentorTeachers,_departments,_students.Max(e=>e.Id));
+        
+        _students.Add(student);
 
             return PartialView("List",_students.Where(e=>e.Status==true).ToList());
     }

@@ -34,12 +34,14 @@
                     data:{},
                     contentType:"application/html charset=utf-8",
                     success: function (response) {
-                        $('.list-partial').html(response);
-                         jQuery('#myTable').DataTable({
-                "scrollY": "450px",
-                "scrollCollapse": true,
-                "paging": true
-            });
+                        $('.list-partial').html(response)
+                        $(document).ready(function(){
+                                jQuery('#myTable').DataTable({
+                            "scrollY": "450px",
+                            "scrollCollapse": true,
+                            "paging": true
+                        })
+                })
                     },
                     error: function (err) {
                         toastr.error("Beklenmedik bir durum oluştu!")
@@ -60,7 +62,7 @@
                     error: function (err) {
                         toastr.error("Bir şeyler ters gitti!")
                     }
-                });
+                })
 
                 $.ajax({
                     url: '@Url.Action("GetCreateOrUpdatePartial", "Home")',
@@ -69,12 +71,12 @@
                     data:{"partialName":"Create"},
                     contentType:"application/html charset=utf-8",
                     success: function (response) {
-                        $('.create-partial').html(response);
+                        $('.create-partial').html(response)
                     },
                     error: function (err) {
                         toastr.error("Beklenmedik bir sorun oluştu!")
                     }
-                });
+                })
             })
     </script>
 

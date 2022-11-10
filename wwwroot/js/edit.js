@@ -1,69 +1,3 @@
-﻿                    @model StudentManagement.ViewModels.StudentCreateOrUpdateViewModel
-                    @using Newtonsoft.Json;
-                        <div class="card container text-center justify-content">
-                            <form asp-antiforgery="false"  id="editForm">
-                                @* <input type="hidden" asp-for="@Model.Id" id='Id' value='@Model.Id' /> *@
-                                <input type="hidden" asp-for="Student.Id" id='EditId' />
-                                <div class="form-group mt-3">
-                                    <label class="control-label text-center">Ad Soyad</label>
-                                    <input readonly asp-for="Student.FullName" id="EditFullName" name="FullName" value="" class="form-control text-center" />
-
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="control-label">Bölüm</label>
-                                    <br />
-                                    @* <select asp-for="DepartmentId" id='DepartmentId' class="select form-control text-center"> *@
-                                    <select asp-for="Student.DepartmentId" id='EditDepartmentId' value="" name="EditDepartmentId" class="select form-control text-center">
-                                        @foreach (var department in Model.Departments)
-                                        {
-                                                <option value="@department.Id" hidden disabled>@department.Name</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="control-label">Hobiler</label>
-                                    <br />
-                                    <select asp-for="Student.Hobbies" id="edit-multi-select-hobby" name="HobbyNames[]" class="form-control text-center EditHobbyNames" multiple="multiple">
-                                        @foreach (var hobby in Model.Hobbies)
-                                        {
-                                                <option value="@hobby.Id" hidden disabled>@hobby.Name</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="control-label">Sınıf Öğretmeni</label>
-                                    <br />
-
-                                    <select asp-for="Student.ClassTeacherId" name="EditClassTeacherId" id='EditClassTeacherId' class="select text-center form-control">
-
-                                       @foreach (var classTeacher in Model.ClassTeachers)
-                                        {
-                                                <option value="@classTeacher.Id" hidden disabled>@classTeacher.FullName</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                <div class="form-group mt-3">
-                                    <label class="control-label">Rehber Öğretmeni</label>
-                                    <br />
-                                    <select asp-for="Student.MentorTeacherId" id='EditMentorTeacherId' name="EditMentorTeacherId" class="select form-control text-center">
-                                        @foreach (var mentorTeacher in Model.MentorTeachers)
-                                        {
-                                                <option value="@mentorTeacher.Id" hidden disabled>@mentorTeacher.FullName</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <input type="submit" disabled id="editBtn" value="Save" class="btn btn-primary form-control btn-update" />
-                                </div>
-                            </form>
-                        </div>
-
-
-                        @* <script type="text/javascript">
                          var inputFullName=$('input#EditFullName');
                          var departmentSelects=$('select#EditDepartmentId option')
                         var classTeacherSelects=$('select#EditClassTeacherId option')
@@ -75,7 +9,7 @@
                             $(document).ready(function (){
                                 $('[id*=btnDetails]').on('click', function () {
                         $.ajax({
-                    url: '@Url.Action("edit", "home")',
+                    url: '/home/edit',
                     dataType: "html",
                     data: { "id": $(this).attr('name') },
                     type: "GET",
@@ -145,8 +79,9 @@
                     
                 });
             });
-                        </script>
-                            <script type="text/javascript">
+
+
+
                             var formInputsChanged = false;
 
                             $(document).ready(function () {
@@ -240,9 +175,3 @@
                                     else toastr.warning("Herhangi bir değişiklik yapmadınız, lütfen bir değişiklik yaptıktan sonra butona tıklayınız!")
                                 })
                             })
-
-                            </script> *@
-
-                            <script src="~/js/edit.js"></script>
-
-

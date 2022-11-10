@@ -57,17 +57,12 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script type="text/javascript">
-        jQuery.noConflict();
+        jQuery.noConflict()
 
         // DataTable
         jQuery(document).ready(function () {
-            jQuery('#myTable').DataTable({
-                "scrollY": "450px",
-                "scrollCollapse": true,
-                "paging": true
-            });
-
                toastr.options = {
   "closeButton": true,
   "newestOnTop": false,
@@ -84,13 +79,13 @@
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut"
 }
-
-        });
+        })
 
 
         
         
     </script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
