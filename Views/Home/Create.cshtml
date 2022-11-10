@@ -1,7 +1,4 @@
  @model StudentManagement.ViewModels.StudentCreateOrUpdateViewModel
-                    @using Newtonsoft.Json;
-<!-- Button trigger modal -->
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -17,11 +14,10 @@
                         <div class="card container text-center justify-content ">
                             <form asp-antiforgery="false"  id="createForm">
                                 @* <input type="hidden" asp-for="@Model.Id" id='Id' value='@Model.Id' /> *@
-                                <input type="hidden" asp-for="Student.Id" id='Id' />
+                                <input type="hidden" asp-for="Student.Id" id='CreateId' />
                                 <div class="form-group">
                                     <label class="control-label text-center">Ad Soyad</label>
-                                    @* <input asp-for="FullName" id='FullName' value='@Model.FullName' class="form-control text-center" /> *@
-                                    <input asp-for="Student.FullName" id='FullName' name="FullName" value="" class="form-control text-center" />
+                                    <input asp-for="Student.FullName" id='CreateFullName' name="FullName" value="" class="form-control text-center" />
 
                                 </div>
 
@@ -29,7 +25,7 @@
                                     <label class="control-label">Bölüm</label>
                                     <br />
                                     @* <select asp-for="DepartmentId" id='DepartmentId' class="select form-control text-center"> *@
-                                    <select asp-for="Student.DepartmentId" id='DepartmentId' value="" name="DepartmentId" class="select form-control text-center">
+                                    <select asp-for="Student.DepartmentId" value="1" id='CreateDepartmentId' value="" name="DepartmentId" class="select form-control text-center">
                                         @foreach (var department in Model.Departments)
                                         {
                                                 <option value="@department.Id">@department.Name</option>
@@ -40,7 +36,7 @@
                                 <div class="form-group">
                                     <label class="control-label">Hobiler</label>
                                     <br />
-                                    <select asp-for="Student.Hobbies" id="multiple-checkboxes" name="HobbyNames" class="form-control text-center HobbyNames" multiple="multiple">
+                                    <select asp-for="Student.Hobbies" id="create-multiple-checkboxes" name="CreateHobbyNames" class="form-control text-center CreateHobbyNames" multiple="multiple">
                                         @foreach (var hobby in Model.Hobbies)
                                         {
                                                 <option value="@hobby.Id">@hobby.Name</option>
@@ -52,7 +48,7 @@
                                     <label class="control-label">Sınıf Öğretmeni</label>
                                     <br />
 
-                                    <select asp-for="Student.ClassTeacherId" name="ClassTeacherId" id='ClassTeacherId' class="select text-center form-control">
+                                    <select asp-for="Student.ClassTeacherId" value="@Model.ClassTeachers.Select(e=>e.Id).First()" name="CreateClassTeacherId" id='CreateClassTeacherId' class="select text-center form-control">
 
                                        @foreach (var classTeacher in Model.ClassTeachers)
                                         {
@@ -64,7 +60,7 @@
                                 <div class="form-group">
                                     <label class="control-label">Rehber Öğretmeni</label>
                                     <br />
-                                    <select asp-for="Student.MentorTeacherId" id='MentorTeacherId' name="MentorTeacherId" class="select form-control text-center">
+                                    <select asp-for="Student.MentorTeacherId" value="@Model.MentorTeachers.Select(e=>e.Id).First()" id="CreateMentorTeacherId" name="MentorTeacherId" class="select form-control text-center">
                                         @foreach (var mentorTeacher in Model.MentorTeachers)
                                         {
                                                 <option value="@mentorTeacher.Id">@mentorTeacher.FullName</option>
@@ -80,3 +76,77 @@
     </div>
   </div>
 </div>
+
+
+<script>
+        $(document).ready(function(){
+            $('#createStudentModal').click(function(){
+                $('#exampleModalLong').modal('show')
+            })
+
+
+
+            $('#createForm').submit(function(e){
+                e.preventDefault();
+                debugger;
+                var hobbyIds=[];
+                                        var selectedHobbyNames=$('#create-multiple-checkboxes option:selected');
+                                        $(selectedHobbyNames).each(function(i,e){
+                                            hobbyIds.push(selectedHobbyNames[i].value);
+                                        })
+                                        if($('#CreateFullName').val()=='' || hobbyIds.length==0){
+                                            toastr.warning('Lütfen alanları doldurunuz!')
+                                            return;
+                                        }
+
+                
+                var studentData={
+                                            id:$('input#CreateId').val(),
+                                            fullName:$('#CreateFullName').val(),
+                                            departmentId:$('select#CreateDepartmentId').val(),
+                                            hobbyIds:hobbyIds,
+                                            classTeacherId:$('select#CreateClassTeacherId').val(),
+                                            mentorTeacherId:$('select#CreateMentorTeacherId').val()
+                                        }
+
+                                        $('input#CreateId').val('');
+                                        $('input#CreateFullName').val('');
+                                        $('input#CreateFullName').val('');
+
+
+
+                                        jsonData=JSON.stringify(studentData);
+
+                                        $.ajax({
+                                            method:"post",
+                                            contentType:'application/json; charset=utf-8',
+                                            dataType:"html",
+                                            data:jsonData,
+                                            url:"/home/create",
+                                            success: function (res) {
+                                                debugger;
+                                                    @* $('table#myTable').remove();
+                                                    $('div.list-partial').html(res); *@
+                                                    jQuery('#myTable').DataTable({
+                "scrollY": "450px",
+                "scrollCollapse": true,
+                "paging": true
+            }).ajax.reload();
+                                                    $('#exampleModalLong').modal('hide');
+
+                                                    toastr.success("Öğrenci verisi başarıyla güncellendi!");
+                                                },
+                                                error: function (err) {
+                                                    toastr.error("Öğrenci verisi güncellenirken bir sorun oluştu");     
+
+                                                }
+
+                                        })
+
+            })
+        })
+
+
+
+
+    </script>

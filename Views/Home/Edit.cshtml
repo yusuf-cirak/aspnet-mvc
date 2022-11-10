@@ -3,11 +3,10 @@
                         <div class="card container text-center justify-content">
                             <form asp-antiforgery="false"  id="editForm">
                                 @* <input type="hidden" asp-for="@Model.Id" id='Id' value='@Model.Id' /> *@
-                                <input type="hidden" asp-for="Student.Id" id='Id' />
+                                <input type="hidden" asp-for="Student.Id" id='EditId' />
                                 <div class="form-group mt-3">
                                     <label class="control-label text-center">Ad Soyad</label>
-                                    @* <input asp-for="FullName" id='FullName' value='@Model.FullName' class="form-control text-center" /> *@
-                                    <input asp-for="Student.FullName" id='FullName' name="FullName" value="" disabled class="form-control text-center" />
+                                    <input readonly asp-for="Student.FullName" id="EditFullName" name="FullName" value="" class="form-control text-center" />
 
                                 </div>
 
@@ -15,7 +14,7 @@
                                     <label class="control-label">Bölüm</label>
                                     <br />
                                     @* <select asp-for="DepartmentId" id='DepartmentId' class="select form-control text-center"> *@
-                                    <select asp-for="Student.DepartmentId" id='DepartmentId' value="" name="DepartmentId" class="select form-control text-center">
+                                    <select asp-for="Student.DepartmentId" id='EditDepartmentId' value="" name="EditDepartmentId" class="select form-control text-center">
                                         @foreach (var department in Model.Departments)
                                         {
                                                 <option value="@department.Id" hidden disabled>@department.Name</option>
@@ -26,7 +25,7 @@
                                 <div class="form-group mt-3">
                                     <label class="control-label">Hobiler</label>
                                     <br />
-                                    <select asp-for="Student.Hobbies" id="multi-select-hobby" name="HobbyNames[]" class="form-control text-center HobbyNames" multiple="multiple">
+                                    <select asp-for="Student.Hobbies" id="edit-multi-select-hobby" name="HobbyNames[]" class="form-control text-center EditHobbyNames" multiple="multiple">
                                         @foreach (var hobby in Model.Hobbies)
                                         {
                                                 <option value="@hobby.Id" hidden disabled>@hobby.Name</option>
@@ -38,7 +37,7 @@
                                     <label class="control-label">Sınıf Öğretmeni</label>
                                     <br />
 
-                                    <select asp-for="Student.ClassTeacherId" name="ClassTeacherId" id='ClassTeacherId' class="select text-center form-control">
+                                    <select asp-for="Student.ClassTeacherId" name="EditClassTeacherId" id='EditClassTeacherId' class="select text-center form-control">
 
                                        @foreach (var classTeacher in Model.ClassTeachers)
                                         {
@@ -50,7 +49,7 @@
                                 <div class="form-group mt-3">
                                     <label class="control-label">Rehber Öğretmeni</label>
                                     <br />
-                                    <select asp-for="Student.MentorTeacherId" id='MentorTeacherId' name="MentorTeacherId" class="select form-control text-center">
+                                    <select asp-for="Student.MentorTeacherId" id='EditMentorTeacherId' name="EditMentorTeacherId" class="select form-control text-center">
                                         @foreach (var mentorTeacher in Model.MentorTeachers)
                                         {
                                                 <option value="@mentorTeacher.Id" hidden disabled>@mentorTeacher.FullName</option>
@@ -65,11 +64,12 @@
 
 
                         <script type="text/javascript">
-                         var inputFullName=$('input#FullName');
-                         var departmentSelects=$('select#DepartmentId option')
-                        var classTeacherSelects=$('select#ClassTeacherId option')
-                         var mentorTeacherSelects=$('select#MentorTeacherId option')
-                        var hobbyMultipleSelects=$('#multi-select-hobby option')
+
+                         var inputFullName=$('input#EditFullName');
+                         var departmentSelects=$('select#EditDepartmentId option')
+                        var classTeacherSelects=$('select#EditClassTeacherId option')
+                         var mentorTeacherSelects=$('select#EditMentorTeacherId option')
+                        var hobbyMultipleSelects=$('#edit-multi-select-hobby option')
 
 
 
@@ -86,16 +86,15 @@
                     contentType: "application/json",
                     success: function (response) {
                         response=JSON.parse(response);
-                        console.log(response);
 
 
-                         $('input#Id').attr('value',response.id);
+                         $('input#EditId').attr('value',response.id);
 
 
-                         inputFullName.removeAttr('disabled')
-                         inputFullName.attr('value',response.fullName);
-                         inputFullName.val(response.fullName);
+                         inputFullName.removeAttr('readonly');
 
+                         inputFullName.val(response.fullName)
+                         
 
                          $(departmentSelects).each(function(i){
                             $(departmentSelects)[i].removeAttribute('hidden')
@@ -103,8 +102,8 @@
 
                          })
                     
-                        var selectedDepartment=$("select#DepartmentId option[value="+response.departmentId+"]").val();
-                        $('select#DepartmentId').val(selectedDepartment)
+                        var selectedDepartment=$("select#EditDepartmentId option[value="+response.departmentId+"]").val();
+                        $('select#EditDepartmentId').val(selectedDepartment)
 
                          $(classTeacherSelects).each(function(i){
                             $(classTeacherSelects)[i].removeAttribute('hidden')
@@ -112,8 +111,8 @@
                             $(classTeacherSelects)[i].removeAttribute('disabled')
 
                          })
-                        var selectedClassTeacher=$("select#ClassTeacherId option[value="+response.classTeacherId+"]").val();
-                        $('select#ClassTeacherId').val(selectedDepartment)
+                        var selectedClassTeacher=$("select#EditClassTeacherId option[value="+response.classTeacherId+"]").val();
+                        $('select#EditClassTeacherId').val(selectedDepartment)
 
 
                          $(mentorTeacherSelects).each(function(i){
@@ -121,8 +120,8 @@
                             $(mentorTeacherSelects)[i].removeAttribute('disabled')
                          })
                          
-                        var selectedMentorTeacher=$("select#MentorTeacherId option[value="+response.mentorTeacherId+"]").val();
-                        $('select#MentorTeacherId').val(selectedMentorTeacher)
+                        var selectedMentorTeacher=$("select#EditMentorTeacherId option[value="+response.mentorTeacherId+"]").val();
+                        $('select#EditMentorTeacherId').val(selectedMentorTeacher)
 
                          $(hobbyMultipleSelects).each(function(){
                             $(this).removeAttr('hidden')
@@ -131,7 +130,7 @@
 
 
                           $(response.hobbies).each(function(i){
-                            $(`#multi-select-hobby option[value="`+response.hobbies[i].id+`"]`).prop('selected',true)
+                            $(`#edit-multi-select-hobby option[value="`+response.hobbies[i].id+`"]`).prop('selected',true)
                          })
 
 
@@ -140,7 +139,7 @@
 
                         },
                         error: function (err) {
-                        alert(err.responseText);
+                        toastr.error(err.responseText);
                     }
                     })
                     
@@ -150,10 +149,6 @@
                             <script type="text/javascript">
                             var formInputsChanged = false;
 
-                             @* $(document).ready(function() {
-                                    $('#multi-select-hobby').multiselect();
-                                }); *@
-
                             $(document).ready(function () {
                                 $('input, select').change(function () {
                                     formInputsChanged = true;
@@ -161,32 +156,34 @@
                             })
 
                             $(document).ready(function(){
-                                $('form').submit(function(e){
+                                $('#editBtn').click(function(e){
                                     e.preventDefault();
                                     if(formInputsChanged){
                                         var hobbyIds=[];
-                                        var selectedHobbyNames=$('#multi-select-hobby option:selected');
+                                        var selectedHobbyNames=$('#edit-multi-select-hobby option:selected');
                                         $(selectedHobbyNames).each(function(i,e){
                                             hobbyIds.push(selectedHobbyNames[i].value);
-                                            console.log(selectedHobbyNames[i].value)
                                         })
 
                                         
-                                        
+                         
+
 
                                         var studentData={
-                                            id:$('input#Id').val(),
-                                            fullName:$('input#FullName').val(),
-                                            departmentId:$('select#DepartmentId').val(),
+                                            id:$('input#EditId').val(),
+                                            fullName:$('#EditFullName').val(),
+                                            departmentId:$('select#EditDepartmentId').val(),
                                             hobbyIds:hobbyIds,
-                                            classTeacherId:$('select#ClassTeacherId').val(),
-                                            mentorTeacherId:$('select#MentorTeacherId').val()
+                                            classTeacherId:$('select#EditClassTeacherId').val(),
+                                            mentorTeacherId:$('select#EditMentorTeacherId').val()
                                         }
-                                        console.log(studentData)
-                            $('#editBtn').attr('disabled','true')
-                         inputFullName.attr('disabled','true')
+
+                         inputFullName.attr('readonly')
                          inputFullName.attr("value","")
                          inputFullName.val("")
+
+                            $('#editBtn').attr('disabled','true')
+
 
 
 
@@ -196,21 +193,21 @@
 
                          })
 
-                         $('select#DepartmentId').val('')
+                         $('select#EditDepartmentId').val('')
 
                          $(classTeacherSelects).each(function(i){
                             $(classTeacherSelects)[i].setAttribute('hidden','true')
                             $(classTeacherSelects)[i].setAttribute('disabled','true')
 
                          })
-                         $('select#ClassTeacherId').val('')
+                         $('select#EditClassTeacherId').val('')
 
 
                           $(mentorTeacherSelects).each(function(i){
                             $(mentorTeacherSelects)[i].setAttribute('hidden','true')
                             $(mentorTeacherSelects)[i].setAttribute('disabled','true')
                          })
-                         $('select#MentorTeacherId').val('')
+                         $('select#EditMentorTeacherId').val('')
 
                           $(hobbyMultipleSelects).each(function(i){
                             $(hobbyMultipleSelects)[i].setAttribute('hidden','true')
@@ -224,30 +221,23 @@
                                             $.ajax({
                                                 url: "/home/edit",
                                                 type: "POST",
-                                                dataType: "json",
+                                                dataType: "html",
                                                 contentType: "application/json; charset=utf-8",
                                                 data: jsonData,
                                                 success: function (res) {
-                                                    console.log(res)
-                                                    var students;
+                                                    $('table#myTable').remove();
+                                                    $('div.list-partial').html(res);
 
-                                                    $.ajax({
-                                                        type:"post",
-                                                        url:"home/getstudents",
-                                                        data:{},
-                                                        success(data){
-                                                            students=data;
-                                                        } 
-                                                    })
-
+                                                    toastr.success("Öğrenci verisi başarıyla güncellendi!");
                                                 },
                                                 error: function (err) {
-                                                   console.log(err);
+                                                    toastr.error("Öğrenci verisi güncellenirken bir sorun oluştu");     
+
                                                 }
                                             }); 
                                     }
 
-                                    else alert("You didnt change anything")
+                                    else toastr.warning("Herhangi bir değişiklik yapmadınız, lütfen bir değişiklik yaptıktan sonra butona tıklayınız!")
                                 })
                             })
 

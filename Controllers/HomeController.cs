@@ -10,7 +10,7 @@ namespace StudentManagement.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private List<Student> _students = InMemoryDataGenerator.GenerateStudents();
+        private List<Student> _students = InMemoryDataGenerator.GenerateStudents().Where(e=>e.Status==true).ToList();
 
         private List<Teacher> _classTeachers = InMemoryDataGenerator.GenerateClassTeachers();
         private List<Teacher> _mentorTeachers = InMemoryDataGenerator.GenerateMentorTeachers();
@@ -29,7 +29,7 @@ namespace StudentManagement.Controllers
             return View(_students);
         }
 
-        public ActionResult GetStudents() => PartialView("List",_students);
+        public ActionResult GetStudents() => PartialView("List",_students.Where(e=>e.Status==true).ToList());
 
         [HttpGet]
     public ActionResult GetCreateOrUpdatePartial([FromQuery] string partialName){
@@ -50,15 +50,29 @@ namespace StudentManagement.Controllers
 
     [HttpPost]
     [Consumes("application/json")]
-    public async Task<JsonResult> Edit([FromBody] UpdateStudentReceivedViewModel student)
+    public ActionResult Edit([FromBody] UpdateStudentReceivedViewModel student)
+    {
+        if (!ModelState.IsValid)
+        {
+            throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
+        }
+            _students.FirstOrDefault(e => e.Id==student.Id)?.UpdateStudent(student, _classTeachers, _mentorTeachers, _departments, _hobbies);
+
+            return PartialView("List",_students.Where(e=>e.Status==true).ToList());
+    }
+
+    [HttpPost]
+    [Consumes("application/json")]
+    public ActionResult Create([FromBody] CreateStudentReceivedViewModel receivedStudent)
     {
         if (!ModelState.IsValid)
         {
             throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
         }
 
+            _students.Add(receivedStudent.CreateStudent(_hobbies,_classTeachers,_mentorTeachers,_departments,_students.Max(e=>e.Id)));
 
-        return Json( _students.Find(e => e.Id==student.Id)?.UpdateStudent(student,_classTeachers,_mentorTeachers,_departments,_hobbies));
+            return PartialView("List",_students.Where(e=>e.Status==true).ToList());
     }
 
         public IActionResult Privacy()

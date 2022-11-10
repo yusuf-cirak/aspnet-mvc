@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
     <div class="row justify-content-start">
+        
         <div class="row ">
             <div class="col" >
                  <div class="card">
@@ -11,7 +12,7 @@
                 </div>
             </div>
             <div class="col" style="text-align:center;">
-    <button id="createBtn" type="button" data-bs-toggle="modal" class="btn btn-primary mb-3" data-bs-target="#exampleModalLong">Öğrenci ekle</button>
+    <button id="createStudentModal" type="button" data-bs-toggle="modal" class="btn btn-primary mb-3" data-bs-target="#exampleModalLong">Öğrenci ekle</button>
                 <div class="create-partial"></div>
                 <div class="update-partial"></div> 
             </div>
@@ -19,7 +20,6 @@
             
         </div>
     </section>
-
 
     @section Scripts{
         <script type="text/javascript">
@@ -37,7 +37,7 @@
                         $('.list-partial').html(response);
                     },
                     error: function (err) {
-                        alert(err.responseText);
+                        toastr.error("Beklenmedik bir durum oluştu!")
                     }
                 });
 
@@ -53,7 +53,7 @@
                         $('.update-partial').html(response);
                     },
                     error: function (err) {
-                        alert(err.responseText);
+                        toastr.error("Bir şeyler ters gitti!")
                     }
                 });
 
@@ -67,17 +67,11 @@
                         $('.create-partial').html(response);
                     },
                     error: function (err) {
-                        alert(err.responseText);
+                        toastr.error("Beklenmedik bir sorun oluştu!")
                     }
                 });
             })
     </script>
 
-    <script>
-        $(document).ready(function(){
-            $('#createBtn').click(function(){
-                $('#exampleModalLong').modal('show')
-            })
-        })
-    </script>
+    
     }

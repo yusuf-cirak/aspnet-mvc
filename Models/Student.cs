@@ -25,6 +25,7 @@ namespace StudentManagement.Models
 
         public Student()
         {
+            Status=true;
         }
 
         public Student(int id, int departmentId, int classTeacherId, int mentorTeacherId, string fullName)
