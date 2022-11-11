@@ -12,9 +12,7 @@
                                                 toastr.warning('Lütfen alanları doldurunuz!')
                                                 return;
                                             }
-                                            $(selectedHobbyNames).each(function(i){
-                                                $(this).prop('selected',false)
-                                            })
+                                            
     
     
                     var studentData={
@@ -26,12 +24,7 @@
                                                 mentorTeacherId:$('select#CreateMentorTeacherId').val()
                                             }
     
-                                            $('input#CreateId').val('');
-                                            $('input#CreateFullName').val('');
-                                            $('input#CreateFullName').val('');
-    
-                                            
-    
+                                           
     
     
                                             jsonData=JSON.stringify(studentData);
@@ -43,7 +36,21 @@
                                                 url:"/home/create",
                                                 cache:false,
                                                 success: function (res) {
-                                                    var student=JSON.parse(res);
+                                                    setTimeout(addStudentToTable,2000);
+
+                                                    function addStudentToTable(){
+
+                                                        $(selectedHobbyNames).each(function(i){
+                                                            $(this).prop('selected',false)
+                                                        })
+
+
+                                                        $('input#CreateId').val('');
+                                                        $('input#CreateFullName').val('');
+                                                        $('input#CreateFullName').val('');
+
+
+                                                        var student=JSON.parse(res);
                                                     console.log(student);
                                                     var studentHobbiesArr=student.hobbies;
                                                     var studentHobbiesStr="";
@@ -72,8 +79,9 @@
                                                     $('div.list-partial').trigger('change');
     
                                                         toastr.success("Öğrenci başarıyla eklendi!");
+                                                    }
                                                     },
-                                                    error: function (err) {
+                                                    error: function () {
                                                         toastr.error("Öğrenci verisi eklenirken bir sorun oluştu");     
     
                                                     }

@@ -1,6 +1,5 @@
 function RemoveScript(){
-    // $(document).ready(function(){
-
+    $(document).ready(function(){
         jQuery('#removeStudentCloseButton').click(function(){
             $('#removeModalLong').modal('hide')
         })
@@ -21,20 +20,28 @@ function RemoveScript(){
                     type:"delete",
                     contentType:"application/json",
                     success:function(){
-                        $('#removeModalLong').modal('hide')
+
+                        function closeModalAndRemoveInputs(){
+                            $('#removeModalLong').modal('hide')
 
                         $('input#DeleteId').val("");
 
                         $('strong#removeStudentName').text("");
 
                         $('input#removeStudentText').text('');
+                        }
 
-                        $('tr#'+id).remove();
+                        setTimeout(removeStudent,2000);
 
-
-                        toastr.info("Öğrenci durumu başarıyla inaktif edildi")
+                        function removeStudent(){
+                            closeModalAndRemoveInputs();
+                            $('tr#'+id).remove();
+                            toastr.info("Öğrenci durumu başarıyla inaktif edildi")
+                        }
+                        
                     },
                     error:function(){
+                        removeInputFields();
                         toastr.error("Öğrenciyi inaktif ederken bir problem oluştu!")
 
                     }
@@ -43,8 +50,9 @@ function RemoveScript(){
 
 
         })
+    })
 
+        
        
-    // }) 
 }
 
