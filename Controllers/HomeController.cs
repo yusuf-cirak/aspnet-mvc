@@ -10,14 +10,14 @@ namespace StudentManagement.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private List<Student> _students = InMemoryDataGenerator.GenerateStudents().Where(e=>e.Status==true).ToList();
+        private List<Student> _students = InMemoryData.Students;
 
-        private List<Teacher> _classTeachers = InMemoryDataGenerator.GenerateClassTeachers();
-        private List<Teacher> _mentorTeachers = InMemoryDataGenerator.GenerateMentorTeachers();
+        private List<Teacher> _classTeachers = InMemoryData.ClassTeachers;
+        private List<Teacher> _mentorTeachers = InMemoryData.MentorTeachers;
 
-        private List<Department> _departments = InMemoryDataGenerator.GenerateDepartments();
+        private List<Department> _departments = InMemoryData.Departments;
 
-        private List<Hobby> _hobbies = InMemoryDataGenerator.GenerateHobbies();
+        private List<Hobby> _hobbies = InMemoryData.Hobbies;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -28,6 +28,8 @@ namespace StudentManagement.Controllers
         {
             return View(_students);
         }
+
+        [HttpGet]
 
         public ActionResult GetStudents() => PartialView("List",_students.Where(e=>e.Status==true).ToList());
 
@@ -48,22 +50,23 @@ namespace StudentManagement.Controllers
         return Json(student);
     }
 
-    [HttpPost]
+    [HttpPut]
     [Consumes("application/json")]
-    public ActionResult Edit([FromBody] UpdateStudentReceivedViewModel student)
+    public JsonResult Edit([FromBody]UpdateStudentReceivedViewModel student)
     {
         if (!ModelState.IsValid)
         {
             throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
         }
-            _students.FirstOrDefault(e => e.Id==student.Id)?.UpdateStudent(student, _classTeachers, _mentorTeachers, _departments, _hobbies);
+            var updatedStudent=_students.FirstOrDefault(e => e.Id==student.Id)?.UpdateStudent(student, _classTeachers, _mentorTeachers, _departments, _hobbies);
 
-            return PartialView("List",_students.Where(e=>e.Status==true).ToList());
+            // return PartialView("List",_students.Where(e=>e.Status==true).ToList());
+            return Json(updatedStudent);
     }
 
     [HttpPost]
     [Consumes("application/json")]
-    public ActionResult Create([FromBody] CreateStudentReceivedViewModel receivedStudent)
+    public JsonResult Create([FromBody] CreateStudentReceivedViewModel receivedStudent)
     {
         if (!ModelState.IsValid)
         {
@@ -74,7 +77,20 @@ namespace StudentManagement.Controllers
         
         _students.Add(student);
 
-            return PartialView("List",_students.Where(e=>e.Status==true).ToList());
+            return Json(student);
+    }
+
+    [HttpDelete]
+    [Consumes("application/json")]
+    public void Delete([FromQuery] int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            throw new Exception(ModelState.Values.SelectMany(v => v.Errors).ToString());
+        }
+        
+        _students.First(e=>e.Id==id).Status=false;
+
     }
 
         public IActionResult Privacy()

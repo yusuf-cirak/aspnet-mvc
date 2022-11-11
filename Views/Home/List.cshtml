@@ -34,13 +34,16 @@
                                     <td id="formStudentHobbies">@GetUserHobbiesAsString(student.Hobbies)</td>
                                     <td id="formStudentClassTeacherName">@student.ClassTeacher.FullName</td>
                                     <td id="formStudentMentorTeacherName">@student.MentorTeacher.FullName</td>
-                                    <td>
+                                    <td id="formStudentOperation">
                                     <a id="btnDetails" name="@student.Id" class="btn btn-info">Güncelle</a>
-                                    <a id="btnDelete" name="@student.Id" class="btn btn-danger deleteBtn">Sil</a>
+                                    <a id="btnDelete" data-bs-toggle="modal" data-bs-target="#removeModalLong" name="@student.Id" class="btn btn-danger">Sil</a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
+        <script>
+            RemoveScript();
+        </script>
 
         

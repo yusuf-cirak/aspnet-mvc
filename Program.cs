@@ -3,7 +3,7 @@ using StudentManagement.Controllers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddNewtonsoftJson().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 
 builder.Services.AddSingleton<HomeController>();
 

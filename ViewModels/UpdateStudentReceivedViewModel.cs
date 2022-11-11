@@ -17,5 +17,20 @@ namespace StudentManagement.ViewModels
         public int ClassTeacherId { get; set; }
 
         public int MentorTeacherId { get; set; }
+
+        public UpdateStudentReceivedViewModel()
+        {
+            
+        }
+
+        public UpdateStudentReceivedViewModel(int ıd, string fullName, int departmentId, int[] hobbyIds, int classTeacherId, int mentorTeacherId)
+        {
+            Id = ıd;
+            FullName = fullName;
+            DepartmentId = departmentId;
+            HobbyIds = hobbyIds;
+            ClassTeacherId = classTeacherId;
+            MentorTeacherId = mentorTeacherId;
+        }
     }
 }

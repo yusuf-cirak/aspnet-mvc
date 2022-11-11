@@ -2,8 +2,22 @@
 
 namespace StudentManagement.Data
 {
-    public static class InMemoryDataGenerator
+    public static class InMemoryData
     {
+        private static List<Department>? _departments;
+        public static List<Department> Departments =>_departments??= GenerateDepartments();
+
+        private static List<Hobby>? _hobbies;
+        public static List<Hobby> Hobbies =>_hobbies??= GenerateHobbies();
+
+        private static List<Teacher>? _classTeachers;
+        public static List<Teacher> ClassTeachers =>_classTeachers??= GenerateClassTeachers();
+
+        private static List<Teacher>? _mentorTeachers;
+        public static List<Teacher> MentorTeachers =>_mentorTeachers??= GenerateMentorTeachers();
+
+         private static List<Student>? _students;
+        public static List<Student> Students =>_students??= GenerateStudents();
 
         public static List<Department> GenerateDepartments()
         {

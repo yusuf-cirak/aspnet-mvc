@@ -15,70 +15,43 @@
     <button id="createStudentModal" type="button" data-bs-toggle="modal" class="btn btn-primary mb-3" data-bs-target="#exampleModalLong">Öğrenci ekle</button>
                 <div class="create-partial"></div>
                 <div class="update-partial"></div> 
+
+
+
+                <div class="remove-modal">
+                    <div class="modal fade" id="removeModalLong" tabindex="-1" role="dialog" aria-labelledby="removeModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="max-width:450px;">
+      <div class="modal-header" style="padding-block:7px;">
+        <h5 class="modal-title" id="removeModalLongTitle">Öğrenci Sil</h5>
+        <button type="button" id="removeStudentCloseButton" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="padding-block:5px;">
+                                <input type="hidden" id='DeleteId' value="" />
+                                <p><strong id="removeStudentName"></strong> adlı öğrenciyi neden siliyorsunuz?</p>
+                                <div class="form-group">
+                                <input id="removeStudentText" class="form-control text-center" type="text" />
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <button id="modalDeleteBtn" class="btn btn-danger form-control btn-update">Sil</button>
+                                </div>
+                        </div>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
             </div>
 
-            
         </div>
     </section>
 
     @section Scripts{
-        <script type="text/javascript">
-
-        // jQuery is not working in partial views when not rendered, i render partial view on init with empty model.
-        $(document).ready(function () {
-
-            $.ajax({
-                    url: '@Url.Action("GetStudents", "Home")',
-                    type: "GET",
-                    dataType: "html",
-                    data:{},
-                    contentType:"application/html charset=utf-8",
-                    success: function (response) {
-                        $('.list-partial').html(response)
-                        $(document).ready(function(){
-                                jQuery('#myTable').DataTable({
-                            "scrollY": "450px",
-                            "scrollCollapse": true,
-                            "paging": true
-                        })
-                })
-                    },
-                    error: function (err) {
-                        toastr.error("Beklenmedik bir durum oluştu!")
-                    }
-                });
-
-
-
-                    $.ajax({
-                    url: '@Url.Action("GetCreateOrUpdatePartial", "Home")',
-                    type: "GET",
-                    dataType: "html",
-                    data:{"partialName":"Edit"},
-                    contentType:"application/html charset=utf-8",
-                    success: function (response) {
-                        $('.update-partial').html(response);
-                    },
-                    error: function (err) {
-                        toastr.error("Bir şeyler ters gitti!")
-                    }
-                })
-
-                $.ajax({
-                    url: '@Url.Action("GetCreateOrUpdatePartial", "Home")',
-                    type: "GET",
-                    dataType: "html",
-                    data:{"partialName":"Create"},
-                    contentType:"application/html charset=utf-8",
-                    success: function (response) {
-                        $('.create-partial').html(response)
-                    },
-                    error: function (err) {
-                        toastr.error("Beklenmedik bir sorun oluştu!")
-                    }
-                })
-            })
-    </script>
-
+        <script>
+            IndexScript();
+        </script>
     
     }
