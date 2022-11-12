@@ -31,7 +31,7 @@
                                 <tr id="@student.Id">
                                     <td id="formStudentFullName">@student.FullName</td>
                                     <td id="formStudentDepartmentName">@student.Department.Name</td>
-                                    <td id="formStudentHobbies">@GetUserHobbiesAsString(student.Hobbies)</td>
+                                    <td id="formStudentHobbies" style="overflow-wrap: break-word;">@GetUserHobbiesAsString(student.Hobbies)</td>
                                     <td id="formStudentClassTeacherName">@student.ClassTeacher.FullName</td>
                                     <td id="formStudentMentorTeacherName">@student.MentorTeacher.FullName</td>
                                     <td id="formStudentOperation">
@@ -43,6 +43,11 @@
                         </tbody>
                     </table>
         <script>
+            jQuery('#myTable').DataTable({
+                        "scrollY": "450px",
+                        "scrollCollapse": true,
+                        "paging": true
+                    })
             RemoveScript();
         </script>
 

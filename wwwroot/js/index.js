@@ -24,13 +24,6 @@ function IndexScript(){
                 contentType:"application/html charset=utf-8",
                 success: function (response) {
                     $('.list-partial').html(response)
-                    $(document).ready(function(){
-                            jQuery('#myTable').DataTable({
-                        "scrollY": "450px",
-                        "scrollCollapse": true,
-                        "paging": true
-                    })
-            })
                 },
                 error: function () {
                     toastr.error("Beklenmedik bir durum oluştu!")
